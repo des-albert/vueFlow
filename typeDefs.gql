@@ -1,0 +1,55 @@
+scalar Date
+
+type User {
+  _id: ID
+  username: String!
+  email: String!
+  fullname: String!
+  password: String!
+  avatar: String
+  role: String!
+}
+
+type Task {
+  _id: ID
+  title: String!
+  description: String!
+  status: String!
+  requester: String!
+  assignee: String
+  updates: [Comment]
+  dueDate: Date!
+  priority: String
+}
+
+type Comment {
+  _id: ID
+  commentBody: String!
+  commentDate: Date
+  commentUser: User!
+}
+
+type Token {
+  token: String!
+}
+
+type Query {
+  getCurrentUser: User
+  getAssignees: [String]
+  getTask(taskId: ID!): Task!
+  getAllTasks: [Task]
+  getRequestTasks(fullname: String!): [Task]
+  getAssignTasks(fullname: String!): [Task]
+  searchAllTasks(searchTerm: String): [Task]
+  searchRequestTasks(searchTerm: String, fullname: String!): [Task]
+  searchAssignTasks(searchTerm: String, fullname: String!): [Task]
+}
+
+type Mutation {
+  changeStatus(taskId: ID!, status: String!): Task!
+  assignTask(taskId: ID!, fullname: String!): Task!
+  addTask(title: String!, description: String!, status: String!, requester: String!, assignee: String!, dueDate: Date!, priority: String!): Task!
+  addTaskComment(commentBody: String!, userId: ID!, taskId: ID!): Comment!
+  signinUser(username: String!, password: String!): Token
+  signupUser(username: String!, email: String!, fullname: String!, password: String!, role: String!): Token
+}
